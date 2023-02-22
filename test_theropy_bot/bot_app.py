@@ -62,9 +62,9 @@ def evaluate(sentence, samp_type = 1):
         if samp_type == 1:
             # that means simple greedy sampling
             predicted_id = tf.argmax(predictions[0]).numpy()
-        elif samp_type == 2:
+        elif samp_type == 10:
             predicted_id = np.random.choice(vocab_tar_size, p = predictions[0].numpy())
-        elif samp_type == 3:
+        elif samp_type == 2:
             _ , indices = tf.math.top_k(predictions[0], k = 3)
             predicted_id = np.random.choice(indices)
 
@@ -81,24 +81,25 @@ def evaluate(sentence, samp_type = 1):
 
 
 print('=' * 50)
-print('+' * 15 + ' CHATBOT v2.0 ' + '+' * 15)
-print('=' * 50)
 
 print('\nThere are different sampling techniques which might result in different text generation.')
 print('Input 1 for => Greedy Sampling')
-print('Input 2 for => Probability Proportional Sampling')
-print('Input 3 for => Top-3 Sampling')
+#print('Input 2 for => Probability Proportional Sampling')
+print('Input 2 for => Top-3 Sampling')
+print()
+
 samp_type = int(input('Input your preferred sampling choice: '))
+print()
 
 if samp_type != 1 and samp_type != 2 and samp_type != 3:
     raise NotImplementedError
 
 while True:
-    inputs = input('User :> ')
+    inputs = input('User : ')
     if inputs == 'quit' or inputs == 'Quit':
         break
     result, sentence = evaluate(inputs, samp_type)
-    print('Bot :> ' + result)
+    print('Momo : ' + result)
 
 
 

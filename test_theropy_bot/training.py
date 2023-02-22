@@ -109,5 +109,5 @@ def training(EPOCHS, First_time = False):
 
     
 # when performing training for first time, use First_time = True, else First_time = False
-training(10, First_time = False) 
+training(30, First_time = False) 
 
