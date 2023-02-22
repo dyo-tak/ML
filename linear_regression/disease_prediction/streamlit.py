@@ -1,7 +1,14 @@
 import numpy as np
 import pickle
 import streamlit as st
+import pandas as pd
 
+df = pd.read_csv('data/disease_precaution.csv')
+df = df.reset_index() 
+dm = pd.read_csv('data/disease_medicine.csv')
+dr = pd.read_csv('data/disease_riskFactors.csv')
+dm = dm.reset_index()
+dr = dr.reset_index()
 
 loaded_model = pickle.load(open('model_re.sav', 'rb'))
 st.set_page_config(page_title = 'Disease Predictor')
@@ -63,14 +70,22 @@ l2 = {'Fungal infection':0,'Allergy':1,'GERD':2,'Chronic cholestasis':3,'Drug Re
 
 def main():
     # giving a title
-    st.title('Disease Prediction Web App')
+    st.write('## Disease Prediction')
+    st.write("")
 
     # getting the input data from the user
-    s1   = st.selectbox('Symptom 1', l1)
-    s2   = st.selectbox('Symptom 2', l1)
-    s3   = st.selectbox('Symptom 3', l1)
-    s4   = st.selectbox('Symptom 4', l1)
-    s5   = st.selectbox('Symptom 5', l1)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        s1   = st.selectbox('Symptom 1', l1)
+    with col2:
+        s2   = st.selectbox('Symptom 2', l1)
+    with col1:
+        s3   = st.selectbox('Symptom 3', l1)
+    with col2:    
+        s4   = st.selectbox('Symptom 4', l1)
+    with col1:    
+        s5   = st.selectbox('Symptom 5', l1)
     
 
     # code for Prediction
@@ -82,6 +97,8 @@ def main():
     # creating a button for Prediction
     if st.button('Disease Prediction'):
         arr = np.zeros(95)
+
+
         for i, disease in enumerate(l1):
             if disease == s1:
                 arr[i-1] = 1
@@ -96,14 +113,29 @@ def main():
 
         diagnosis = round(marks_prediction(arr)[0])
         if diagnosis > 40 and diagnosis < 0:
-            st.title(f"Cannot predict based on the data provided.")
+            result = (f"**Cannot predict based on the data provided.**")
         else:
-            st.title(f"You have {list(l2.keys())[list(l2.values()).index(diagnosis)]}")
-        
-        
+            d = list(l2.keys())[list(l2.values()).index(diagnosis)]
+            result = (f"You have **{d}**")
+            st.write("")
+            st.error(result)
+            st.write("")
+            for index, row in df.iterrows():
+                if row[1] == d:
+                    st.write("**You should take the following precautions:**")
+                    st.write(row[2:5])
+                    break   
 
-
-
+            
+            for index, row in dr.iterrows():
+                    if row[2] == d:
+                        did = row[1]
+                        for i, r in dm.iterrows():
+                            if r[3] == did:
+                                print(r[2])
+                                st.write("**Commanly prescribed medicines:**")  
+                                st.write("- " + r[2])   
+                        break  
 
 
 
