@@ -5,6 +5,7 @@ from preprocess import clean_text
 import numpy as np
 import json
 from keras.preprocessing.text import tokenizer_from_json
+from colorama import Fore, Style
 
 # load the tokenziers
 with open('./processed_data/inp_lang.json', 'r') as f:
@@ -95,11 +96,14 @@ if samp_type != 1 and samp_type != 2 and samp_type != 3:
     raise NotImplementedError
 
 while True:
-    inputs = input('User : ')
+    inputs = input(Fore.BLUE + 'User : ' + Style.RESET_ALL)
     if inputs == 'quit' or inputs == 'Quit':
         break
     result, sentence = evaluate(inputs, samp_type)
-    print('Momo : ' + result)
+    print(Fore.GREEN + 'Momo : ' + result + Style.RESET_ALL)
+    #print(Style.RESET_ALL)
+
+
 
 
 
