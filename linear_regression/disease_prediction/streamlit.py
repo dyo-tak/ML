@@ -95,7 +95,10 @@ def main():
                 arr[i-1] = 1
 
         diagnosis = round(marks_prediction(arr)[0])
-        st.title(f"You have {list(l2.keys())[list(l2.values()).index(diagnosis)]}")
+        if diagnosis > 40 and diagnosis < 0:
+            st.title(f"Cannot predict based on the data provided.")
+        else:
+            st.title(f"You have {list(l2.keys())[list(l2.values()).index(diagnosis)]}")
         
         
 
